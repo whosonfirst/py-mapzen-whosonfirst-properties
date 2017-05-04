@@ -57,6 +57,16 @@ class aliases:
 
     def __init__ (self):
 
+        # IMPORTANT: see the way we're fetching these property and alias specs over the network at runtime?
+        # that is a decision born of expediency still this is largely still code that is only practical for
+        # internal use. that said it suggests an overall pattern that we should merge with the existing practice
+        # of baking specs directly in to code - like we do for placetypes or source. for example:
+        #
+        # https://github.com/whosonfirst/py-mapzen-whosonfirst-sources/blob/master/utils/mk-spec.py
+        #
+        # that said, we are not doing this yet. we should. but we don't. this is what we do instead.
+        # (20170504/thisisaaronland)
+
         self.property_aliases_json = 'https://raw.githubusercontent.com/whosonfirst/whosonfirst-properties/master/aliases/property_aliases.json'
         property_rsp = requests.get(self.property_aliases_json)
 
