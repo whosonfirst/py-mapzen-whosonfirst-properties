@@ -98,7 +98,7 @@ class aliases:
 
             a = self.resolve(k)
 
-            logging.debug("process %s (%s) = %s" % (k, a, v))
+            # logging.debug("process %s (%s) = %s" % (k, a, v))
 
             if a.startswith("name:"):
 
