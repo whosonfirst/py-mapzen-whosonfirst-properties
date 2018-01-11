@@ -3,6 +3,101 @@ import json
 import logging
 import types
 
+import mapzen.whosonfirst.sources
+
+#  returns (population, population_src)
+
+def population(f):
+
+    population = 0
+    population_src = ""
+    
+    possible = [
+        "wof:population",
+        "wd:population",
+        "wk:population",
+        "statoids:population",
+        "gn:population",
+        "qs:pop",
+        "zs:population",
+        "meso:population",
+        "ne:population",
+    ]
+
+    props = f["properties"]
+    
+    for p in possible:
+        
+        pop = props.get(p, 0)
+        pop = int(pop)
+        
+        if pop == 0:
+            continue
+        
+        population = pop
+            
+        prefix, ignore = p.split(":")
+        src = mapzen.whosonfirst.sources.get_by_prefix(prefix)
+        
+        population_src = src.details["name"]
+        break
+
+    return (population, population_src)
+
+def population_rank(f):
+            
+    if props.["wof:placetype"] == "venue":
+        return 0
+
+    population, ignore = population(f)
+    
+    return population_rank_for_population(population)
+
+def population_rank_for_population(population):
+    
+    rank = 0
+    
+    if population > 1000000000:
+        rank = 18
+    elif population > 100000000:
+        rank = 17
+    elif population >= 50000000:
+        rank = 16
+    elif population >= 20000000:
+        rank = 15
+    elif population >= 10000000:
+        rank = 14
+    elif population >= 5000000:
+        rank = 13
+    elif population >= 1000000:
+        rank = 12
+    elif population >= 500000:
+        rank = 11
+    elif population >= 200000:
+        rank = 10
+    elif population >= 100000:
+        rank = 9
+    elif population >= 50000:
+        rank = 8
+    elif population >= 20000:
+        rank = 7
+    elif population >= 10000:
+        rank = 6
+    elif population >= 5000:
+        rank = 5
+    elif population >= 2000:
+        rank = 4
+    elif population >= 1000:
+        rank = 3
+    elif population >= 200:
+        rank = 2
+    elif population > 0:
+        rank = 1
+    else:
+        pass
+
+    return rank
+
 def is_current(f):
 
     props = f["properties"]
